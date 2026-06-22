@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portly — Your Doors, One Tap Away</title>
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+  <style>
+    :root {
+      --bg:        #0e0e0e;
+      --surface:   #131313;
+      --raised:    #1e1e1e;
+      --border:    #2a2a2a;
+      --accent:    #78dc77;
+      --claude:    #78dc77;
+      --kiro:      #78dc77;
+      --term:      #78dc77;
+      --text:      #e7e5e5;
+      --muted:     #acabaa;
+      --faint:     #5a5a5a;
+      --radius:    12px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+    nav { border-bottom: 1px solid var(--border); padding: 18px 0; }
+    nav .container { display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-size: 18px; font-weight: 700; letter-spacing: -0.3px; color: var(--text); }
+    .logo span { color: var(--accent); }
+    nav a { font-size: 14px; color: var(--muted); }
+    nav a:hover { color: var(--text); text-decoration: none; }
+    .hero { position: relative; padding: 80px 0 64px; text-align: center; overflow: hidden; }
+    .hero-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at center bottom, rgba(120,220,119,0.08) 0%, transparent 70%); pointer-events: none; z-index: 0; }
+    .hero-inner { position: relative; z-index: 1; }
+    .badge { display: inline-block; background: var(--accent)18; color: var(--accent); border: 1px solid var(--accent)40; border-radius: 20px; font-size: 12px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; padding: 4px 14px; margin-bottom: 24px; }
+    h1 { font-size: clamp(32px, 6vw, 52px); font-weight: 800; letter-spacing: -1.5px; line-height: 1.1; margin-bottom: 20px; }
+    h1 em { font-style: normal; color: var(--accent); }
+    .hero p { font-size: 18px; color: var(--muted); max-width: 540px; margin: 0 auto 36px; }
+    .cta-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: var(--radius); font-size: 15px; font-weight: 600; transition: opacity 0.15s; }
+    .btn:hover { opacity: 0.85; text-decoration: none; }
+    .btn-primary { background: var(--accent); color: #000; }
+    .btn-secondary { background: var(--raised); color: var(--text); border: 1px solid var(--border); }
+    .phone-section { padding: 64px 0 32px; overflow: hidden; }
+    .phone-grid { display: flex; justify-content: center; align-items: flex-end; gap: 12px; padding: 24px 0 40px; }
+    .phone-wrapper { display: flex; flex-direction: column; align-items: center; gap: 12px; transition: transform 0.3s; }
+    .phone-frame { position: relative; width: 210px; border-radius: 38px; border: 1.5px solid rgba(255,255,255,0.10); box-shadow: 0 32px 80px rgba(0,0,0,0.70), 0 0 0 10px rgba(0,0,0,0.25); overflow: hidden; background: #000; }
+    .phone-frame img { display: block; width: 100%; height: auto; }
+    .dynamic-island { position: absolute; top: 11px; left: 50%; transform: translateX(-50%); width: 29%; height: 10px; background: #060608; border-radius: 999px; z-index: 2; }
+    .phone-label { font-size: 12px; color: var(--faint); text-align: center; }
+    .phone-wrapper:nth-child(1) { transform: rotate(-4deg) translateY(28px); opacity: 0.65; }
+    .phone-wrapper:nth-child(2) .phone-frame { width: 230px; box-shadow: 0 32px 80px rgba(0,0,0,0.70), 0 0 0 10px rgba(0,0,0,0.25), 0 0 70px rgba(120,220,119,0.22); }
+    .phone-wrapper:nth-child(3) .phone-frame { width: 230px; box-shadow: 0 32px 80px rgba(0,0,0,0.70), 0 0 0 10px rgba(0,0,0,0.25), 0 0 70px rgba(120,220,119,0.22); }
+    .phone-wrapper:nth-child(4) { transform: rotate(4deg) translateY(28px); opacity: 0.65; }
+    .scroll-dots { display: none; justify-content: center; gap: 6px; padding-bottom: 24px; }
+    .scroll-dots span { display: block; width: 6px; height: 6px; border-radius: 999px; background: var(--faint); transition: width 0.25s, background 0.25s; }
+    .scroll-dots span.active { width: 22px; background: var(--accent); }
+    @media (max-width: 640px) {
+      .phone-grid { overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding: 24px 20px; margin: 0 -20px; justify-content: flex-start; align-items: center; }
+      .phone-grid::-webkit-scrollbar { display: none; }
+      .phone-wrapper { scroll-snap-align: center; transform: none !important; opacity: 1 !important; flex-shrink: 0; }
+      .phone-frame { width: 200px; }
+      .phone-wrapper:nth-child(2) .phone-frame,
+      .phone-wrapper:nth-child(3) .phone-frame { width: 200px; box-shadow: 0 32px 80px rgba(0,0,0,0.70), 0 0 0 10px rgba(0,0,0,0.25); }
+      .scroll-dots { display: flex; }
+    }
+    .features { padding: 0 0 72px; }
+    .section-label { font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--faint); margin-bottom: 32px; }
+    .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+    .feature-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; position: relative; overflow: hidden; }
+    .feature-card::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at bottom right, rgba(120,220,119,0.04) 0%, transparent 70%); pointer-events: none; }
+    .feature-icon { margin-bottom: 14px; }
+    .feature-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .feature-card p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .how { padding: 0 0 72px; }
+    .steps { display: flex; flex-direction: column; gap: 0; position: relative; }
+    .step { display: flex; gap: 20px; padding-bottom: 28px; position: relative; }
+    .step:last-child { padding-bottom: 0; }
+    .step-num { flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; background: var(--accent)18; border: 1px solid var(--accent)40; color: var(--accent); font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .step-body h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; padding-top: 5px; }
+    .step-body p { font-size: 13px; color: var(--muted); }
+    .privacy-strip { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 40px 0; margin-bottom: 72px; }
+    .privacy-strip h2 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .privacy-strip p { font-size: 14px; color: var(--muted); max-width: 580px; }
+    footer { border-top: 1px solid var(--border); padding: 28px 0; }
+    footer .container { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    footer p { font-size: 13px; color: var(--faint); }
+    footer a { color: var(--muted); font-size: 13px; }
+    footer a:hover { color: var(--text); text-decoration: none; }
+    @media (max-width: 480px) { .hero { padding: 56px 0 48px; } h1 { font-size: 32px; } }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <span class="logo">Portly<span>.</span></span>
+      <a href="privacy.html">Privacy Policy</a>
+    </div>
+  </nav>
+  <main>
+    <section class="hero">
+      <div class="hero-bg"></div>
+      <div class="container hero-inner">
+        <div class="badge">iOS &amp; watchOS</div>
+        <h1>Your doors,<br><em>one tap away</em></h1>
+        <p>Modern door access for RCO M5 security systems. Routes, widgets, Apple Watch, and Control Center — all from your iPhone.</p>
+        <div class="cta-group">
+          <a class="btn btn-primary" href="https://github.com/kalleeh/portly/issues">Get Support</a>
+          <a class="btn btn-secondary" href="privacy.html">Privacy Policy</a>
+        </div>
+      </div>
+    </section>
+    <section class="phone-section">
+      <div class="phone-grid" id="phoneGrid">
+        <div class="phone-wrapper">
+          <div class="phone-frame"><div class="dynamic-island"></div><img src="screen-doors.png" alt="Doors" loading="lazy"></div>
+          <span class="phone-label">Doors</span>
+        </div>
+        <div class="phone-wrapper">
+          <div class="phone-frame"><div class="dynamic-island"></div><img src="screen-route.png" alt="Route" loading="lazy"></div>
+          <span class="phone-label">Route</span>
+        </div>
+        <div class="phone-wrapper">
+          <div class="phone-frame"><div class="dynamic-island"></div><img src="screen-widget.png" alt="Widget" loading="lazy"></div>
+          <span class="phone-label">Widget</span>
+        </div>
+        <div class="phone-wrapper">
+          <div class="phone-frame"><div class="dynamic-island"></div><img src="screen-settings.png" alt="Settings" loading="lazy"></div>
+          <span class="phone-label">Settings</span>
+        </div>
+      </div>
+      <div class="scroll-dots" aria-hidden="true"><span class="active"></span><span></span><span></span><span></span></div>
+    </section>
+    <div class="container">
+      <section class="features">
+        <p class="section-label">Features</p>
+        <div class="feature-grid">
+          <div class="feature-card">
+            <div class="feature-icon"><svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="44" rx="11" fill="#78dc77" fill-opacity="0.12"/><g transform="translate(10,10)" stroke="#78dc77" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15.75 5.25a3 3 0 0 1 3 3M12 10.5a6 6 0 0 1 6-6m1.5 6v1.875c0 .621-.504 1.125-1.125 1.125H5.625A1.125 1.125 0 0 1 4.5 12.375V10.5a7.5 7.5 0 1 1 15 0Z"/></g></svg></div>
+            <h3>One-Tap Open</h3>
+            <p>Tap a door to unlock it instantly. Star your favorites for quick access from the main screen.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"><svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="44" rx="11" fill="#78dc77" fill-opacity="0.12"/><g transform="translate(10,10)" stroke="#78dc77" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6.75V15m0 0 3-3m-3 3-3-3m9-3v8.25m0 0 3-3m-3 3-3-3M3.75 3.375h4.5m-4.5 9.75h4.5m4.5-9.75h4.5"/></g></svg></div>
+            <h3>Routes</h3>
+            <p>Chain multiple doors into a route and open them all in sequence with a single tap.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"><svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="44" rx="11" fill="#78dc77" fill-opacity="0.12"/><g transform="translate(10,10)" stroke="#78dc77" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5ZM13.5 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5Z"/></g></svg></div>
+            <h3>Widgets &amp; Control Center</h3>
+            <p>Open your favorite doors from the home screen widget or the iOS Control Center — no need to launch the app.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"><svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="44" rx="11" fill="#78dc77" fill-opacity="0.12"/><g transform="translate(10,10)" stroke="#78dc77" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></g></svg></div>
+            <h3>Apple Watch</h3>
+            <p>Open doors straight from your wrist. The Watch app shows your starred doors for instant access.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"><svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="44" rx="11" fill="#78dc77" fill-opacity="0.12"/><g transform="translate(10,10)" stroke="#78dc77" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15.75 5.25a3 3 0 0 1 3 3m-3-3a3 3 0 0 0-3 3m3-3v-1.5m0 1.5h1.5m1.5 3h1.5m-1.5 0a3 3 0 0 1-3 3m3-3v1.5m-3 1.5a3 3 0 0 1-3-3m3 3v1.5m-3-4.5h-1.5m10.5 6.75v3a2.25 2.25 0 0 1-2.25 2.25h-10.5A2.25 2.25 0 0 1 3 17.25v-3"/></g></svg></div>
+            <h3>Guest Codes</h3>
+            <p>Generate temporary access codes for visitors. Set expiry times and revoke access anytime.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon"><svg width="44" height="44" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="44" height="44" rx="11" fill="#78dc77" fill-opacity="0.12"/><g transform="translate(10,10)" stroke="#78dc77" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7.864 4.243A7.5 7.5 0 0 1 19.5 10.5c0 2.92-.556 5.709-1.568 8.268M5.742 6.364A7.465 7.465 0 0 0 4.5 10.5a7.464 7.464 0 0 1-1.15 3.993m1.989 3.559A11.209 11.209 0 0 0 8.25 10.5a3.75 3.75 0 1 1 7.5 0c0 .527-.021 1.049-.064 1.565M12 10.5a14.94 14.94 0 0 1-3.6 9.75m6.633-4.596a18.666 18.666 0 0 1-2.485 5.33"/></g></svg></div>
+            <h3>Face ID Security</h3>
+            <p>Lock the app behind Face ID. Your credentials never leave the device — stored securely in the iOS Keychain.</p>
+          </div>
+        </div>
+      </section>
+      <section class="how">
+        <p class="section-label">How it works</p>
+        <div class="steps">
+          <div class="step"><div class="step-num">1</div><div class="step-body"><h3>Configure your system</h3><p>Enter your RCO M5 server host, server ID, and system name in the app settings.</p></div></div>
+          <div class="step"><div class="step-num">2</div><div class="step-body"><h3>Log in with your building credentials</h3><p>Use the username and password provided by your building administrator to authenticate.</p></div></div>
+          <div class="step"><div class="step-num">3</div><div class="step-body"><h3>Star your favorite doors</h3><p>Browse the door list and star the ones you use most. They'll appear at the top for quick access.</p></div></div>
+          <div class="step"><div class="step-num">4</div><div class="step-body"><h3>Open doors from anywhere</h3><p>Use the app, home screen widget, Control Center, or Apple Watch — whichever is fastest.</p></div></div>
+        </div>
+      </section>
+    </div>
+    <div class="privacy-strip">
+      <div class="container">
+        <h2>Your data stays yours</h2>
+        <p>Your credentials are encrypted in the iOS Keychain. All communication uses HTTPS. No data is collected or shared. <a href="privacy.html">Read the full privacy policy →</a></p>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <div class="container">
+      <p>© 2026 Portly</p>
+      <div style="display:flex;gap:20px">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="https://github.com/kalleeh/portly/issues">Support</a>
+      </div>
+    </div>
+  </footer>
+  <script>
+    (function() {
+      var grid = document.getElementById('phoneGrid');
+      var dots = Array.from(document.querySelectorAll('.scroll-dots span'));
+      var phones = Array.from(grid ? grid.querySelectorAll('.phone-wrapper') : []);
+      if (!grid || !dots.length) return;
+      grid.addEventListener('scroll', function() {
+        var mid = grid.scrollLeft + grid.offsetWidth / 2;
+        var closest = 0, minDist = Infinity;
+        phones.forEach(function(p, i) {
+          var dist = Math.abs((p.offsetLeft + p.offsetWidth / 2) - mid);
+          if (dist < minDist) { minDist = dist; closest = i; }
+        });
+        dots.forEach(function(d, i) { d.classList.toggle('active', i === closest); });
+      }, { passive: true });
+    })();
+  </script>
+</body>
+</html>

@@ -63,21 +63,21 @@
     <div class="page-header">
       <p class="label">Legal</p>
       <h1>Privacy Policy</h1>
-      <p class="updated">Last updated: April 2026</p>
+      <p class="updated">Last updated: November 2026</p>
     </div>
     <div class="content">
       <div class="callout">
-        <p><strong>Short version:</strong> Portly collects no data about you. Your credentials are stored in the iOS Keychain. The app communicates only with your own RCO M5 server over HTTPS. No analytics, no tracking, no third-party services.</p>
+        <p><strong>Short version:</strong> Portly collects no data about you. Your credentials are stored in the iOS Keychain. The app communicates only with your own RCO M5 server over HTTPS; door names you rename yourself sync between your devices through your own iCloud account. No analytics, no tracking, no third-party services.</p>
       </div>
 
       <h2>Who we are</h2>
       <p>Portly is an iOS app developed by Karl Wallbom. Open an issue at <a href="https://github.com/kalleeh/portly/issues">github.com/kalleeh/portly/issues</a>.</p>
 
       <h2>What data we collect</h2>
-      <p>We collect nothing. Portly does not collect, transmit, store, or share any personal data with us or any third party.</p>
+      <p>We collect nothing. Portly does not collect, transmit, store, or share any personal data with us or any third party. Apart from requests to your RCO M5 server and your own device backups, the only app data that leaves your device is your custom door names, which iOS syncs through your own iCloud account (see below).</p>
 
       <h2>What happens on your device</h2>
-      <p>The app stores the following data <em>locally on your device only</em>:</p>
+      <p>The app stores the following data on your device:</p>
       <table>
         <thead><tr><th>Data</th><th>Where stored</th><th>Purpose</th></tr></thead>
         <tbody>
@@ -86,16 +86,18 @@
           <tr><td>Access token</td><td>iOS Keychain (device-only, no iCloud sync)</td><td>Maintains authenticated session</td></tr>
           <tr><td>Door favorites</td><td>UserDefaults (on-device)</td><td>Shows starred doors for quick access</td></tr>
           <tr><td>Routes</td><td>UserDefaults (on-device)</td><td>Stores door sequences for one-tap route opening</td></tr>
+          <tr><td>Custom door names</td><td>UserDefaults (on-device) and iCloud key-value storage</td><td>Keeps the names you give doors in sync across your devices</td></tr>
         </tbody>
       </table>
-      <p>None of this data is backed up to iCloud, shared with us, or transmitted anywhere except to your own RCO M5 server over HTTPS.</p>
+      <p>Keychain items are device-only: they are never synced to iCloud and are not restored to another device from a backup. App data stored in UserDefaults (favorites, routes, door names) may be included in your regular iCloud or computer device backups, like any app&#39;s data. Custom door names (door ID, the name you chose and when you changed it) are also stored in your own iCloud account using Apple&#39;s iCloud key-value storage so they appear on your other devices; credentials and tokens are never stored there. None of this data is shared with us.</p>
 
       <h2>Network connections</h2>
-      <p>Portly makes one type of outbound connection:</p>
+      <p>Portly makes these outbound connections:</p>
       <ul>
         <li><strong>HTTPS requests</strong> — to your RCO M5 server only, using the host you configured. These carry authentication and door-open commands.</li>
+        <li><strong>iCloud key-value storage</strong> — handled by iOS through your Apple Account, carrying only your custom door names (see above). Apple&#39;s own privacy policy applies to iCloud.</li>
       </ul>
-      <p>No connections are made to any third-party servers. There are no analytics endpoints, no crash reporting services, and no telemetry of any kind.</p>
+      <p>No other connections are made to third-party servers. There are no analytics endpoints, no crash reporting services, and no telemetry of any kind.</p>
 
       <h2>Biometrics (Face ID)</h2>
       <p>If you enable Face ID, the app uses the iOS LocalAuthentication framework to verify your identity before unlocking. Biometric data is handled entirely by iOS and never leaves the Secure Enclave on your device. Portly never accesses, stores, or transmits biometric data.</p>
